@@ -1,0 +1,14 @@
+chart_studio==1.1.0
+dash==2.16.1
+dash_leaflet==1.0.15
+geopandas==0.14.3
+ipython==8.23.0
+joblib==1.2.0
+pandas==1.4.3
+plotly==5.20.0
+requests==2.31.0
+scikit_learn==1.4.2
+statsmodels==0.14.1
+xgboost==2.0.3
+gunicorn
+dash-tools
