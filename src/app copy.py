@@ -1,6 +1,6 @@
 import dash
 from dash import dcc, html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 from IPython.display import IFrame, display, HTML
@@ -19,7 +19,6 @@ from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error,
 from dash import dash_table
 import dash_leaflet as dl
 import geopandas as gpd
-from dash import dash_table
 
 warnings.filterwarnings("ignore")
 
@@ -146,13 +145,6 @@ def render_content(tab):
                 
                     ]), 
 
-                    html.Div([
-
-                    html.Img(src=" https://github.com/gbuvoli/HEBO/raw/main/FC_logo", style={'height': '200px'}),
-                    html.Img(src="https://github.com/gbuvoli/HEBO/raw/main/MC_logo",style={'height': '200px'} ),
-                   html.Img(src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6jLtA1IWAH0W5kIj5SVeX4USrpkkO1I0KTwULAYspiw&s", style={'height': '200px'})
-                    
-                    ], style={'display':'flex','justify-content': 'space-around'}),
                     html.Br(),
                     html.H3("Variables:"),
                     html.P([
@@ -177,21 +169,7 @@ def render_content(tab):
                                 ])
   
                 ])
-            ], style={'width':'70%', 'text-align': 'justify' , 'padding':'30px'}),
-
-            html.Div([
-
-                    html.Img(src=" https://visssy.co/blog/wp-content/uploads/2023/11/acabados-de-un-apartamento-en-obra-gris_visssy-1250x834.jpeg", style={'height': '200px','width':'300px'}),
-                    html.Br(),
-                    html.Img(src="https://blog.coninsa.co/sites/default/files/styles/max_width_770px/public/2023-07/monteazul-proyecto-coninsa_2.jpg?itok=7B4bP_s_", style={'height': '200px','width':'300px'}),
-                    html.Br(),
-                    html.Img(src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvEm6nhiDx7UvCJfC6w4KFMhS3uNM5uvx7Aw&s", style={'height': '200px','width':'300px'})
-
-
-            ])
-
-
-
+            ], style={'width':'70%', 'text-align': 'justify' })
         ], style={'display':'flex','justify-content':'space-around', 'background-color':'#F2F1E9' }) 
 
 
@@ -341,23 +319,16 @@ def render_content(tab):
                                 )
                             
                             
-                            ]), 
-
-                                html.Br(),
-
-                                 html.Div([
-                                
-                                    html.Div(id='table_container')
-                                ],style={'width': '100%'})
-
+                            ]),   
                            
                     ], style={'width': '40%', 'background-color': '#F2F1E9', 'padding':'30px','padding-top':'20px'}),
 
-        # LADO DERECHO
+        # LADO IZQUIERDO
 
                 html.Div([
                         html.Div([
-                            
+                            html.H3('DESCRIPTIVOS'),
+
                             html.Div([
                                     dcc.Graph(id='side1'),
                                     html.Br(),
@@ -381,7 +352,7 @@ def render_content(tab):
     elif tab == 'tab-vender':
            return html.Div([
 
-            html.Div([  html.H2(['Calcula el precio de tu apartamento:']),
+            html.Div([  html.H2(['CALCULA EL PRECIO DE TU APARTAMENTO:']),
                         html.Div(id='vfiltros'),
                         html.Br(),
                         html.Div(id='vfiltro2'),
@@ -485,10 +456,10 @@ def render_content(tab):
         
         #LADO CENTRAL
                     html.Div([
-                        html.H3('Escoge un modelo para hacer la estimación del precio'),
+                        html.H3('ESCOGE EL MODELO PARA HACER LA PREDICCIÓN'),
                         html.Div([
                             html.Div([
-                                html.H4('Selecciona un modelo'),
+                                html.H4('Selecciona los modelos'),
                                     dcc.RadioItems(
                                     id='modelo',
                                     options=[
@@ -503,8 +474,30 @@ def render_content(tab):
 
                             html.Br(),
 
+                            html.Div([
+                                dcc.Graph(id='features'),
+                                html.Br(),
+                                dcc.Graph(id='test_graph')
+                            ])    
+                        ]),
+        
+                    ],style={'width': '40%', 'background-color': '#F2F1E9', 'padding':'30px','padding-top':'20px'}),
+
+
+        # LADO IZQUIERDO
+
+                html.Div([
                         html.Div([
-                                    html.H1('Métricas de los Modelos',style={'color': '#D99982'}),
+                            html.H1('PREDICCIONES'),
+                            html.P( "El valor calculado para tu inmueble es: "),
+                            html.P( id='precio_calculado'),
+                            html.Br(),
+                            html.P( "El valor estimado del metro cuadrado es: "),
+                            html.P(id='metro-cuadrado')
+                        ]),
+
+                        html.Div([
+                                    html.H1('Métricas de los Modelos'),
                                     dash_table.DataTable(
                                         id='tabla-metricas',
                                         columns=[{'name': col, 'id': col} for col in metrics_df.columns],
@@ -518,41 +511,10 @@ def render_content(tab):
                                             {'if': {'row_index': 'even'}, 'backgroundColor': '#F2C6AC'}
                                         ]
                                     )
-                                ]),
+                                ])
 
 
-                                html.Br(),
 
-
-                            html.Div([
-                                dcc.Graph(id='features'),
-                                html.Br(),
-                            ])    
-                        ]),
-        
-                    ],style={'width': '40%', 'background-color': '#F2F1E9', 'padding':'30px','padding-top':'20px'}),
-
-
-        # LADO DERECHO
-
-                html.Div([
-                        html.Div([
-                            html.H1('Precio estimado', style={'color': '#D99982'}),
-                            html.P( "El valor calculado para tu inmueble es: "),
-                            html.P( id='precio_calculado'),
-                            html.Br(),
-                            html.P( "El valor estimado del metro cuadrado es: "),
-                            html.P(id='metro-cuadrado'),
-
-                        html.Div([
-                            dcc.Graph(id='test_graph')
-                            ]),
-                        html.Div([
-                        html.Img(src="https://github.com/gbuvoli/HEBO/blob/main/matriz.png?raw=true",style={'width': '100%'})                           
-                            ])
-
-
-                        ])
 
 
                     ], style={'width': '35%', 'background-color': '#F2F1E9','padding':'20px'}),
@@ -579,8 +541,7 @@ def get_center_coordinates(filtered_df):
      Output('filtros', 'children'),
      Output('filtro2', 'children'),
      Output('data_store', 'data'),
-     Output('cantidad', 'children'),
-     Output('table_container','children')],
+     Output('cantidad', 'children')],
      
     
     [Input('ciudad-input', 'value'),
@@ -653,34 +614,11 @@ def update_filters(selected_city, selected_zones, categoria, habitaciones, baño
     
     print(price)
 
-    columns_to_exclude = ['lat', 'long']
-    included_columns = [col for col in filtered_df.columns if col not in columns_to_exclude]
-    custom_format = lambda x: f'{x:.3f}' if isinstance(x, float) else x
-
-    table = dash_table.DataTable(
-        columns=[{'name': col, 'id': col, 'type': 'numeric'} for col in included_columns],
-        data=filtered_df[included_columns].to_dict('records'),
-        style_table={'height': '400px', 'overflowY': 'scroll'},  # Establece una altura fija y agrega un scroll vertical
-        style_header={'backgroundColor': '#D99982', 'fontWeight': 'bold'},
-        style_cell={'minWidth': 100, 'textAlign': 'center'},
-        style_data_conditional=[
-            {'if': {'row_index': 'odd'}, 'backgroundColor': '#B9CDCA'},
-            {'if': {'row_index': 'even'}, 'backgroundColor': '#F2C6AC'}
-        ]
-    )
-
-
-
     data_store = filtered_df.to_json(date_format='iso', orient='split')
-
-    if len(filtered_df)==0: 
-        table = html.P('No hay datos disponibles')
-
-
     nresults=f'Mostrando {len(filtered_df)} resultados'
     print(filtered_df.head())
+    return sector_options, barrio_options, categoria_options,html.P(filtro_ciudad), html.P(filtro_zonas), data_store, html.P(nresults)
 
-    return sector_options, barrio_options, categoria_options,html.P(filtro_ciudad), html.P(filtro_zonas), data_store, html.P(nresults),table
 
 
 ############   MAPA PRINCIPAL - COMPRAR ##################
@@ -714,10 +652,6 @@ def update_map(data_store):
 
         return (center_lat, center_long), markers
 
-
-
-
-
 ############   GRAFICOS DESCRIPTIVOS - COMPRAR ##################
 
 @app.callback(
@@ -740,54 +674,51 @@ def side_figures(selected_city):
         fig1 = go.Figure()
 
         # Añadir barras para cada estrato dentro de cada categoría de vivienda
-        for i, categoria in enumerate(estratos_por_categoria.columns):
+        for categoria in estratos_por_categoria.columns:
             fig1.add_trace(go.Bar(
                 x=estratos_por_categoria.index,
                 y=estratos_por_categoria[categoria],
-                name=f'Categoria {categoria}',
-                marker_color=custom_palette[i]  # Asignar un color de la paleta a cada categoría
+                name=f'Categoria {categoria}'
             ))
 
         # Personalizar el diseño del gráfico
-        fig1.update_layout(
-            title=f'Distribución de Categoría de Vivienda por Estratos en {selected_city}',
-            xaxis=dict(title='Categoría de Vivienda'),
-            yaxis=dict(title='Cantidad'),
-            barmode='stack',
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.45,  # Ajuste vertical para posicionar la leyenda en la parte inferior del gráfico
-                xanchor="right",
-                x=1.05,   # Ajuste horizontal para posicionar la leyenda fuera del gráfico
-                font=dict(
-                    family="Arial",  
-                    size=8,   
-                    color="black" 
-                )),
-            colorway=custom_palette  # Asignar la paleta de colores a todo el gráfico
-        )
+            fig1.update_layout(
+                title=f'Distribución de Categoría de Vivienda por Estratos en {selected_city}',
+                xaxis=dict(title='Categoría de Vivienda'),
+                yaxis=dict(title='Cantidad'),
+                barmode='stack',
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.45,  # Ajuste vertical para posicionar la leyenda en la parte inferior del gráfico
+                    xanchor="right",
+                    x=1.05,   # Ajuste horizontal para posicionar la leyenda fuera del gráfico
+                    font=dict(
+                        family="Arial",  
+                        size=8,   
+                        color="black" 
+                    )))
             
-        fig2 = go.Figure(data=[go.Histogram(x=filtered_df[filtered_df['price'] >= 0]['price'], marker_color=custom_palette[2])])
+        fig2 = go.Figure(data=[go.Histogram(x=filtered_df[filtered_df['price'] >= 0]['price'])])
 
         fig2.update_layout(
             title='Histograma de precios en {}'.format(selected_city),
             xaxis_title='Precio',
-            yaxis_title='Frecuencia',
-            colorway=custom_palette  # Asignar la paleta de colores a todo el gráfico (opcional)
+            yaxis_title='Frecuencia'
         )
+
         # Agrupar por sector y calcular el valor promedio del metro cuadrado
         valor_promedio_por_sector = filtered_df.groupby('Sector')['p_s'].mean().reset_index()
 
         # Crear la gráfica de barras
         fig3 = px.bar(valor_promedio_por_sector, x='Sector', y='p_s', 
                     title=f'Valor Promedio del Metro Cuadrado por Sector en {selected_city}',
-                    labels={'Sector': 'Sector', 'p_s': 'Valor Promedio del Metro Cuadrado'},
-                    color_discrete_sequence=custom_palette)
-
+                    labels={'sector': 'Sector', 'valor_metro_cuadrado': 'Valor Promedio del Metro Cuadrado'})
+        
         fig3.update_layout(
-            xaxis_title='Sector',
-            yaxis_title='Precio por metro cuadrado'
+            title='Precio por metro cuadrado en {}'.format(selected_city),
+            xaxis_title='Precio por metro cuadrado',
+            yaxis_title='Sector'
         )
 
 
@@ -908,30 +839,15 @@ def run_models(data_store2, categoria, habitaciones, baños, park, area, admon, 
         tickfont=dict(size=8),  # Tamaño de la letra de los labels
         tickmode='array',        # Modo de los labels (array)
         tickvals=list(range(len(fi))),  # Valores de los labels
-        ticktext=[text[:20] + '\n' + text[20:] if len(text) > 20 else text for text in fi['feature']],
-        gridcolor='#CCCCCC', 
-        linecolor='#333333'  # Color de las líneas de los ejes
-    ),
-    plot_bgcolor='rgba(0,0,0,0)',   # Fondo transparente del gráfico
-    paper_bgcolor='rgba(0,0,0,0)'   # Fondo transparente del papel
-)
-
-    # Cambiar el color de las líneas de los ejes x e y
-    #features.update_xaxes(linecolor='#333333')
-    features.update_yaxes(linecolor='#333333')
+        ticktext=[text[:20] + '\n' + text[20:] if len(text) > 20 else text for text in fi['feature']]  # Texto de los labels con división
+            )
+        )
 
     
     test_graph=px.scatter(test, x='Y Real', y='Y Predicho', trendline='ols', color_discrete_sequence=['#D99982'],
                  title='Resultados del Testing: Y Real vs. Y')
 
-    test_graph.update_traces(line=dict(color='#1F3040')),
-
-    test_graph.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',  # Establecer el fondo del papel como transparente
-        plot_bgcolor='rgba(0,0,0,0)',   # Establecer el fondo del gráfico como transparente
-        xaxis=dict(gridcolor='#CCCCCC', linecolor='#333333'),  # Cambiar el color del grid y del eje x
-        yaxis=dict(gridcolor='#CCCCCC', linecolor='#333333')   # Cambiar el color del grid y del eje y
-    )
+    test_graph.update_traces(line=dict(color='#1F3040'))
 
     print(data_in)
 
